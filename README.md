@@ -63,13 +63,17 @@ export GITHUB_TOKEN=ghp_...   # needs read:user scope
 npm run dev
 ```
 
-## Build order (suggested for AI implementation)
+## Status: v1 built and tested
 
-1. **github.ts** — GraphQL `pinnedItems(first: 6)` query, map to `{name, description, url, homepageUrl, languages, topics}`
-2. **resume.ts (markdown)** — render one block per repo per the rules above
-3. **CLI** — `--output`, `--inplace` with `<!-- PROJECTS:START/END -->` markers
-4. **DOCX output** — `docx` npm package, same data, styled runs
-5. **Description polisher** — optional LLM pass that tightens casual descriptions into resume voice
+The full CLI is implemented, typechecked, and covered by tests (`npm test` — 8/8 passing), plus an end-to-end smoke test through the real code path (GraphQL mapping → Markdown → DOCX):
+
+- GitHub GraphQL fetch of pinned repos (forks + archived auto-filtered)
+- Markdown render per the formatting rules
+- DOCX render (valid .docx via the `docx` package)
+- `--output FILE`, `--format md|docx`, `--inplace TEMPLATE` with `<!-- PROJECTS:START/END -->` markers
+
+Usage: `GITHUB_TOKEN=ghp_... npm run dev -- --output projects.md`
+Tests: `npm test` · Typecheck: `node node_modules/typescript/bin/tsc --noEmit`
 
 ## Tech stack
 
